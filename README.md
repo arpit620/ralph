@@ -120,7 +120,7 @@ This creates `prd.json` with user stories structured for autonomous execution.
 ./scripts/ralph/ralph.sh --tool claude [max_iterations]
 
 # Using Codex with an explicit model and reasoning effort
-./scripts/ralph/ralph.sh --tool codex --model gpt-5.5 --effort high [max_iterations]
+./scripts/ralph/ralph.sh --tool codex --model gpt-5.6-terra --effort high [max_iterations]
 
 # Using Antigravity with an explicit model and reasoning effort
 ./scripts/ralph/ralph.sh --tool antigravity --model gemini-3.8-flash --effort high [max_iterations]

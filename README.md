@@ -2,7 +2,7 @@
 
 ![Ralph](ralph.webp)
 
-Ralph is an autonomous AI agent loop that runs AI coding tools ([Amp](https://ampcode.com) or [Claude Code](https://docs.anthropic.com/en/docs/claude-code)) repeatedly until all PRD items are complete. Each iteration is a fresh instance with clean context. Memory persists via git history, `progress.txt`, and `prd.json`.
+Ralph is an autonomous AI agent loop that runs AI coding tools ([Amp](https://ampcode.com), [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Codex](https://developers.openai.com/codex/cli), or [Antigravity](https://antigravity.google/docs/cli/headless)) repeatedly until all PRD items are complete. Each iteration is a fresh instance with clean context. Memory persists via git history, `progress.txt`, and `prd.json`.
 
 Based on [Geoffrey Huntley's Ralph pattern](https://ghuntley.com/ralph/).
 
@@ -13,6 +13,8 @@ Based on [Geoffrey Huntley's Ralph pattern](https://ghuntley.com/ralph/).
 - One of the following AI coding tools installed and authenticated:
   - [Amp CLI](https://ampcode.com) (default)
   - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (`npm install -g @anthropic-ai/claude-code`)
+  - [Codex CLI](https://developers.openai.com/codex/cli) (`codex`)
+  - [Antigravity CLI](https://antigravity.google/docs/cli/headless) (`agy`)
 - `jq` installed (`brew install jq` on macOS)
 - A git repository for your project
 
@@ -27,10 +29,11 @@ Copy the ralph files into your project:
 mkdir -p scripts/ralph
 cp /path/to/ralph/ralph.sh scripts/ralph/
 
-# Copy the prompt template for your AI tool of choice:
-cp /path/to/ralph/prompt.md scripts/ralph/prompt.md    # For Amp
-# OR
-cp /path/to/ralph/CLAUDE.md scripts/ralph/CLAUDE.md    # For Claude Code
+# Copy the prompt templates used by the selected AI tool:
+cp /path/to/ralph/prompt.md scripts/ralph/prompt.md    # Amp
+cp /path/to/ralph/CLAUDE.md scripts/ralph/CLAUDE.md    # Claude Code
+cp /path/to/ralph/CODEX.md scripts/ralph/CODEX.md      # Codex
+cp /path/to/ralph/GEMINI.md scripts/ralph/GEMINI.md    # Antigravity
 
 chmod +x scripts/ralph/ralph.sh
 ```
@@ -115,9 +118,15 @@ This creates `prd.json` with user stories structured for autonomous execution.
 
 # Using Claude Code
 ./scripts/ralph/ralph.sh --tool claude [max_iterations]
+
+# Using Codex with an explicit model and reasoning effort
+./scripts/ralph/ralph.sh --tool codex --model gpt-5.5 --effort high [max_iterations]
+
+# Using Antigravity with an explicit model and reasoning effort
+./scripts/ralph/ralph.sh --tool antigravity --model gemini-3.8-flash --effort high [max_iterations]
 ```
 
-Default is 10 iterations. Use `--tool amp` or `--tool claude` to select your AI coding tool.
+Default is 10 iterations. Use `--tool amp`, `--tool claude`, `--tool codex`, or `--tool antigravity` to select your AI coding tool. `--model` and `--effort` are optional; when omitted, the selected CLI uses its configured defaults.
 
 Ralph will:
 1. Create a feature branch (from PRD `branchName`)
@@ -133,9 +142,11 @@ Ralph will:
 
 | File | Purpose |
 |------|---------|
-| `ralph.sh` | The bash loop that spawns fresh AI instances (supports `--tool amp` or `--tool claude`) |
+| `ralph.sh` | The bash loop that spawns fresh AI instances (supports Amp, Claude Code, Codex, and Antigravity, with model and effort overrides) |
 | `prompt.md` | Prompt template for Amp |
 | `CLAUDE.md` | Prompt template for Claude Code |
+| `CODEX.md` | Prompt template for Codex |
+| `GEMINI.md` | Prompt template for Antigravity |
 | `prd.json` | User stories with `passes` status (the task list) |
 | `prd.json.example` | Example PRD format for reference |
 | `progress.txt` | Append-only learnings for future iterations |

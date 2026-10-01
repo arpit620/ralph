@@ -53,6 +53,7 @@ npm run dev
 - Memory persists via git history, `progress.txt`, and `prd.json`
 - Stories should be small enough to complete in one context window
 - Codex exec emits progress events by default; use `--output-last-message` and suppress stdout for concise non-interactive output, matching Claude's `--print` behavior
+- Keep the root and starter copies of `ralph.sh` in sync; `--fast` opts Codex into `service_tier="fast"` and is disabled by default.
 - Always update AGENTS.md with discovered patterns for future iterations
 
 ## Codex Iteration Instructions

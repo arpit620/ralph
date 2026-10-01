@@ -24,3 +24,11 @@ Load the ralph skill and convert tasks/prd-[feature-name].md to prd.json
 # Antigravity: use a model slug shown by `agy models`
 ./scripts/ralph/ralph.sh --tool antigravity --model gemini-3.5-flash-medium 10
 ```
+
+To enable Codex fast service tier, add `--fast`:
+
+```bash
+./scripts/ralph/ralph.sh --tool codex --model gpt-5.6-sol --fast 10
+```
+
+`--fast` defaults to false and is only supported with `--tool codex`. It passes `--config 'service_tier="fast"'` to Codex.

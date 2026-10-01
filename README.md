@@ -123,9 +123,14 @@ This creates `prd.json` with user stories structured for autonomous execution.
 # Using Codex with an explicit model and reasoning effort
 ./scripts/ralph/ralph.sh --tool codex --model gpt-5.6-terra --effort high [max_iterations]
 
+# Using Codex with fast service tier (optional)
+./scripts/ralph/ralph.sh --tool codex --model gpt-5.6-sol --fast [max_iterations]
+
 # Using Antigravity with an explicit model and reasoning effort
 ./scripts/ralph/ralph.sh --tool antigravity --model gemini-3.8-flash --effort high [max_iterations]
 ```
+
+`--fast` is an optional Codex-only flag, disabled by default. When supplied, it passes `--config 'service_tier="fast"'` to Codex.
 
 Default is 10 iterations. Use `--tool amp`, `--tool claude`, `--tool codex`, or `--tool antigravity` to select your AI coding tool. `--model` and `--effort` are optional; when omitted, the selected CLI uses its configured defaults.
 

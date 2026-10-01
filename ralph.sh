@@ -1,6 +1,6 @@
 #!/bin/bash
 # Ralph Wiggum - Long-running AI agent loop
-# Usage: ./ralph.sh [--tool amp|claude|codex|antigravity] [--model MODEL] [--effort EFFORT] [max_iterations]
+# Usage: ./ralph.sh [--tool amp|claude|codex|antigravity] [--model MODEL] [--effort EFFORT] [--fast] [max_iterations]
 
 set -e
 
@@ -8,6 +8,7 @@ set -e
 TOOL="amp"  # Default to amp for backwards compatibility
 MODEL=""
 EFFORT=""
+FAST=false
 MAX_ITERATIONS=10
 
 usage() {
@@ -18,6 +19,7 @@ Options:
   --tool TOOL             amp, claude, codex, or antigravity (default: amp)
   --model MODEL           Model name passed to the selected CLI
   --effort EFFORT         Reasoning effort passed to the selected CLI
+  --fast                  Enable Codex fast service tier (default: false)
   --max-iterations N      Maximum number of iterations (default: 10)
   -h, --help              Show this help
 
@@ -65,6 +67,10 @@ while [[ $# -gt 0 ]]; do
       [[ -n "$EFFORT" ]] || { echo "Error: --effort requires a value." >&2; exit 1; }
       shift
       ;;
+    --fast)
+      FAST=true
+      shift
+      ;;
     --max-iterations)
       require_value "--max-iterations" "$2"
       MAX_ITERATIONS="$2"
@@ -95,6 +101,11 @@ done
 # Validate tool choice
 if [[ "$TOOL" != "amp" && "$TOOL" != "claude" && "$TOOL" != "codex" && "$TOOL" != "antigravity" ]]; then
   echo "Error: Invalid tool '$TOOL'. Must be 'amp', 'claude', 'codex', or 'antigravity'."
+  exit 1
+fi
+
+if [[ "$FAST" == true && "$TOOL" != "codex" ]]; then
+  echo "Error: --fast is only supported with --tool codex." >&2
   exit 1
 fi
 
@@ -184,6 +195,7 @@ for i in $(seq 1 $MAX_ITERATIONS); do
       CLI_ARGS=(exec --dangerously-bypass-approvals-and-sandbox)
       [[ -n "$MODEL" ]] && CLI_ARGS+=(--model "$MODEL")
       [[ -n "$EFFORT" ]] && CLI_ARGS+=(--config "model_reasoning_effort=\"$EFFORT\"")
+      [[ "$FAST" == true ]] && CLI_ARGS+=(--config 'service_tier="fast"')
       CODEX_OUTPUT_FILE=$(mktemp)
       CODEX_ERROR_FILE=$(mktemp)
       if codex "${CLI_ARGS[@]}" -o "$CODEX_OUTPUT_FILE" - < "$PROJECT_ROOT/AGENTS.md" \

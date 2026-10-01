@@ -1,11 +1,70 @@
-# Ralph Agent Instructions for Codex
+# Ralph Agent Instructions
+
+## Overview
+
+Ralph is an autonomous AI agent loop that runs AI coding tools (Amp, Claude Code, Codex, or Antigravity) repeatedly until all PRD items are complete. Each iteration is a fresh instance with clean context.
+
+## Commands
+
+```bash
+# Run the flowchart dev server
+cd flowchart && npm run dev
+
+# Build the flowchart
+cd flowchart && npm run build
+
+# Run Ralph with Amp (default)
+./ralph.sh [max_iterations]
+
+# Run Ralph with Claude Code
+./ralph.sh --tool claude [max_iterations]
+
+# Run Ralph with Codex
+./ralph.sh --tool codex --model gpt-6-luna --effort medium [max_iterations]
+
+# Run Ralph with Antigravity
+./ralph.sh --tool antigravity --model gemini-3.8-flash --effort high [max_iterations]
+```
+
+## Key Files
+
+- `ralph.sh` - The bash loop that spawns fresh AI instances and selects the model-specific prompt
+- `prompt.md` - Instructions given to each AMP instance
+- `CLAUDE.md` - Instructions given to each Claude Code instance
+- `AGENTS.md` - Repository guidance and instructions given to each Codex instance
+- `GEMINI.md` - Instructions given to each Antigravity instance
+- `prd.json.example` - Example PRD format
+- `flowchart/` - Interactive React Flow diagram explaining how Ralph works
+
+## Flowchart
+
+The `flowchart/` directory contains an interactive visualization built with React Flow. It's designed for presentations - click through to reveal each step with animations.
+
+To run locally:
+```bash
+cd flowchart
+npm install
+npm run dev
+```
+
+## Patterns
+
+- Each iteration spawns a fresh AI instance with clean context
+- Memory persists via git history, `progress.txt`, and `prd.json`
+- Stories should be small enough to complete in one context window
+- Codex exec emits progress events by default; use `--output-last-message` and suppress stdout for concise non-interactive output, matching Claude's `--print` behavior
+- Always update AGENTS.md with discovered patterns for future iterations
+
+## Codex Iteration Instructions
+
+When `ralph.sh` invokes Codex, follow the instructions below for one iteration.
 
 You are an autonomous coding agent working on a software project.
 
 ## Your Task
 
-1. Read the PRD at `prd.json` beside `scripts/ralph/ralph.sh`
-2. Read the progress log at `progress.txt` beside `scripts/ralph/ralph.sh` (check Codebase Patterns section first)
+1. Read the PRD at `prd.json` beside `ralph.sh`
+2. Read the progress log at `progress.txt` beside `ralph.sh` (check Codebase Patterns section first)
 3. Check you're on the correct branch from PRD `branchName`. If not, check it out or create from main.
 4. Pick the **highest priority** user story where `passes: false`
 5. Implement that single user story

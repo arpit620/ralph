@@ -20,7 +20,7 @@ cd flowchart && npm run build
 ./ralph.sh --tool claude [max_iterations]
 
 # Run Ralph with Codex
-./ralph.sh --tool codex --model gpt-5.5 --effort high [max_iterations]
+./ralph.sh --tool codex --model gpt-6-luna --effort medium [max_iterations]
 
 # Run Ralph with Antigravity
 ./ralph.sh --tool antigravity --model gemini-3.8-flash --effort high [max_iterations]

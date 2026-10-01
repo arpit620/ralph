@@ -32,11 +32,12 @@ cp /path/to/ralph/ralph.sh scripts/ralph/
 # Copy the prompt templates used by the selected AI tool:
 cp /path/to/ralph/prompt.md scripts/ralph/prompt.md    # Amp
 cp /path/to/ralph/CLAUDE.md scripts/ralph/CLAUDE.md    # Claude Code
-cp /path/to/ralph/CODEX.md scripts/ralph/CODEX.md      # Codex
 cp /path/to/ralph/GEMINI.md scripts/ralph/GEMINI.md    # Antigravity
 
 chmod +x scripts/ralph/ralph.sh
 ```
+
+For Codex, put the Ralph iteration instructions in the **project root** `AGENTS.md`. The runner reads that file, and Codex also discovers it automatically. Use [`starter/AGENTS.md`](starter/AGENTS.md) as the template: copy it to the project root if there is no `AGENTS.md`, or add its instructions to the existing root file. Keep `prd.json` and `progress.txt` beside `scripts/ralph/ralph.sh`.
 
 ### Option 2: Install skills globally (Amp)
 
@@ -145,7 +146,7 @@ Ralph will:
 | `ralph.sh` | The bash loop that spawns fresh AI instances (supports Amp, Claude Code, Codex, and Antigravity, with model and effort overrides) |
 | `prompt.md` | Prompt template for Amp |
 | `CLAUDE.md` | Prompt template for Claude Code |
-| `CODEX.md` | Prompt template for Codex |
+| `AGENTS.md` | Root repository guidance and Codex iteration instructions |
 | `GEMINI.md` | Prompt template for Antigravity |
 | `prd.json` | User stories with `passes` status (the task list) |
 | `prd.json.example` | Example PRD format for reference |

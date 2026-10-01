@@ -5,7 +5,7 @@ cp /path/to/ralph/ralph.sh scripts/ralph/
 # Copy the prompt templates used by the selected AI tool:
 cp /path/to/ralph/prompt.md scripts/ralph/prompt.md    # Amp
 cp /path/to/ralph/CLAUDE.md scripts/ralph/CLAUDE.md    # Claude Code
-cp /path/to/ralph/CODEX.md scripts/ralph/CODEX.md      # Codex
+# For Codex, add /path/to/ralph/starter/AGENTS.md instructions to the project root AGENTS.md
 cp /path/to/ralph/GEMINI.md scripts/ralph/GEMINI.md    # Antigravity
 
 chmod +x scripts/ralph/ralph.sh

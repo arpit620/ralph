@@ -103,6 +103,11 @@ if ! [[ "$MAX_ITERATIONS" =~ ^[1-9][0-9]*$ ]]; then
   exit 1
 fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
+if [[ "$TOOL" == "codex" && ! -f "$PROJECT_ROOT/AGENTS.md" ]]; then
+  echo "Error: Codex requires AGENTS.md in the project root: $PROJECT_ROOT" >&2
+  exit 1
+fi
 PRD_FILE="$SCRIPT_DIR/prd.json"
 PROGRESS_FILE="$SCRIPT_DIR/progress.txt"
 ARCHIVE_DIR="$SCRIPT_DIR/archive"
@@ -181,7 +186,7 @@ for i in $(seq 1 $MAX_ITERATIONS); do
       [[ -n "$EFFORT" ]] && CLI_ARGS+=(--config "model_reasoning_effort=\"$EFFORT\"")
       CODEX_OUTPUT_FILE=$(mktemp)
       CODEX_ERROR_FILE=$(mktemp)
-      if codex "${CLI_ARGS[@]}" -o "$CODEX_OUTPUT_FILE" - < "$SCRIPT_DIR/CODEX.md" \
+      if codex "${CLI_ARGS[@]}" -o "$CODEX_OUTPUT_FILE" - < "$PROJECT_ROOT/AGENTS.md" \
         > /dev/null 2> "$CODEX_ERROR_FILE"; then
         OUTPUT=$(cat "$CODEX_OUTPUT_FILE")
       else
